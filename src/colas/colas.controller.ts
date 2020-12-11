@@ -1,31 +1,33 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { ColasService } from './colas.service';
 
 @Controller('colas')
 export class ColasController {
-
-    @Get()
-    findAll() {
-        return 'This action returns all colas';
-    }
-
-    @Get(':id')
-    findOne(@Param('id') id: string) {
-        return `This action returns #${id} colas`;
-    }
+    constructor(private readonly colasService: ColasService){}
     
-    @Post()
-    create(@Body() body) {
-      return body;
-      // return `This action creates a coffee`;
-    }
+  @Get()
+  findAll(@Query() paginationQuery) {
+    // const { limit, offset } = paginationQuery;
+    return this.colasService.findAll();
+  }
 
-    @Patch(':id')
-    update(@Param('id') id: string, @Body() body){
-        return 'This action updates #${id} colas';
-    }
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.colasService.findOne(id);
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-      return `This action removes #${id} coffee`;
-    }
+  @Post()
+  create(@Body() body) {
+    return this.colasService.create(body);
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() body) {
+    return this.colasService.update(id, body);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.colasService.remove(id);
+  }
 }
