@@ -1,45 +1,47 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Colas } from './entities/colas.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { CreateColasDto } from './dto/create-colas.dto';
+import { UpdateColasDto } from './dto/update-colas.dto';
+import { Cola } from './entities/colas.entity';
 
 @Injectable()
 export class ColasService {
-  private colas: Colas[] = [
-    {
-      id: 1,
-      name: 'Fritz Cola',
-      brand: 'Fritz',
-      flavors: ['Cola', 'Natural'],
-    },
-  ];
+  constructor(
+    @InjectRepository(Cola) 
+    private readonly colaRepository: Repository<Cola>,
+  ){}
 
   findAll() {
-    return this.colas;
+    return this.colaRepository.find();
   }
 
-  findOne(id: string) {
-    const cola = this.colas.find(item => item.id === +id);
+  async findOne(id: string) {
+    const cola = await this.colaRepository.findOne(id);
     if (!cola) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
     return cola;
   }
 
-  create(createColaDto: any) {
-    this.colas.push(createColaDto);
-    return createColaDto;
+  create(createColaDto: CreateColasDto) {
+   const cola = this.colaRepository.create(createColaDto);
+   return this.colaRepository.save(cola)
   }
 
-  update(id: string, updateColaDto: any) {
-    const existingCola = this.findOne(id);
-    if (existingCola) {
-      // update the existing entity
+  async update(id: string, updateColaDto: UpdateColasDto) {
+    const coffee = await this.colaRepository.preload({
+      id: +id,
+      ...updateColaDto,
+    });
+    if (!coffee) {
+      throw new NotFoundException(`Cola #${id} not found`);
     }
+    return this.colaRepository.save(coffee);
   }
 
-  remove(id: string) {
-    const coffeeIndex = this.colas.findIndex(item => item.id === +id);
-    if (coffeeIndex >= 0) {
-      this.colas.splice(coffeeIndex, 1);
-    }
+  async remove(id: string) {
+    const cola = await this.findOne(id);
+    return this.colaRepository.remove(cola);
   }
 }
