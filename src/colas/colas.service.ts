@@ -19,7 +19,7 @@ export class ColasService {
   async findOne(id: string) {
     const cola = await this.colaRepository.findOne(id);
     if (!cola) {
-      throw new NotFoundException(`Coffee #${id} not found`);
+      throw new NotFoundException(`Cola #${id} not found`);
     }
     return cola;
   }
@@ -30,14 +30,14 @@ export class ColasService {
   }
 
   async update(id: string, updateColaDto: UpdateColasDto) {
-    const coffee = await this.colaRepository.preload({
+    const cola = await this.colaRepository.preload({
       id: +id,
       ...updateColaDto,
     });
-    if (!coffee) {
+    if (!cola) {
       throw new NotFoundException(`Cola #${id} not found`);
     }
-    return this.colaRepository.save(coffee);
+    return this.colaRepository.save(cola);
   }
 
   async remove(id: string) {
