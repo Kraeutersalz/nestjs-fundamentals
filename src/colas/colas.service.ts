@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { Repository } from 'typeorm';
+import { Event } from 'src/events/entities/event.entity';
+import { Connection, Repository } from 'typeorm';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
 import { Cola } from './entities/colas.entity';
@@ -14,6 +15,7 @@ export class ColasService {
     private readonly colaRepository: Repository<Cola>,
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
+    private readonly connection: Connection,
   ){}
 
   findAll(paginationQuery: PaginationQueryDto) {
@@ -68,6 +70,31 @@ export class ColasService {
   async remove(id: string) {
     const cola = await this.findOne(id);
     return this.colaRepository.remove(cola);
+  }
+
+  async recommendCola(cola: Cola){
+    const queryRunner = this.connection.createQueryRunner();
+
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+
+    try {
+      cola.recommendations++
+      
+      const recommendEvent = new Event();
+      recommendEvent.name = 'recommend_coffee';
+      recommendEvent.type = 'cola';
+      recommendEvent.payload = { colaId: cola.id };
+    
+      await queryRunner.manager.save(cola); 
+      await queryRunner.manager.save(recommendEvent);
+      
+      await queryRunner.commitTransaction();
+    } catch (err) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 
   private async preloadFlavorByName(name: string): Promise<Flavor>{
