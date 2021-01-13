@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { ColasService } from './colas.service';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
@@ -8,9 +9,9 @@ export class ColasController {
     constructor(private readonly colasService: ColasService){}
     
   @Get()
-  findAll(@Query() paginationQuery) {
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
     // const { limit, offset } = paginationQuery;
-    return this.colasService.findAll();
+    return this.colasService.findAll(paginationQuery);
   }
 
   @Get(':id')

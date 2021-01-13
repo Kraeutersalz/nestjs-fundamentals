@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Repository } from 'typeorm';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
@@ -15,9 +16,12 @@ export class ColasService {
     private readonly flavorRepository: Repository<Flavor>,
   ){}
 
-  findAll() {
+  findAll(paginationQuery: PaginationQueryDto) {
+    const {limit, offset} = paginationQuery;
     return this.colaRepository.find({
       relations: ['flavors'],
+      skip: offset,
+      take: limit,
     });
   }
 
