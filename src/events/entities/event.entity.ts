@@ -17,4 +17,3 @@ export class Event {
   @Column('json')
   payload: Record<string, any>;
 }
-

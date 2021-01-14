@@ -11,6 +11,9 @@ export class Cola{
     @Column()
     brand: string;
 
+    @Column({nullable: true})
+    description: string;
+
     @Column({default: 0})
     recommendations:number;
 

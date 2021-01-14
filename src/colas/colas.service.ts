@@ -5,7 +5,7 @@ import { Event } from 'src/events/entities/event.entity';
 import { Connection, Repository } from 'typeorm';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
-import { Cola } from './entities/colas.entity';
+import { Cola } from './entities/cola.entity';
 import { Flavor } from './entities/flavor.entity';
 
 @Injectable()

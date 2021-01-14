@@ -1,5 +1,5 @@
 import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Cola } from "./colas.entity";
+import { Cola } from "./cola.entity";
 
 @Entity()
 export class Flavor {
