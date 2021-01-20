@@ -1,0 +1,1 @@
+export const COLA_BRANDS = 'COLA_BRANDS';

@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
 import { Connection, Repository } from 'typeorm';
+import { COLA_BRANDS } from './colas.constants';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
 import { Cola } from './entities/cola.entity';
@@ -16,6 +17,7 @@ export class ColasService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     private readonly connection: Connection,
+    @Inject(COLA_BRANDS) colaBrands: string[],
   ){}
 
   findAll(paginationQuery: PaginationQueryDto) {
