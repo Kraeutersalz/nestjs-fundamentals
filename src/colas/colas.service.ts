@@ -18,7 +18,9 @@ export class ColasService {
     private readonly flavorRepository: Repository<Flavor>,
     private readonly connection: Connection,
     @Inject(COLA_BRANDS) colaBrands: string[],
-  ){}
+  ){
+    console.log(colaBrands);
+  }
 
   findAll(paginationQuery: PaginationQueryDto) {
     const {limit, offset} = paginationQuery;
