@@ -1,6 +1,7 @@
 import { Injectable, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from 'src/events/entities/event.entity';
+import { Connection } from 'typeorm';
 import { COLA_BRANDS } from './colas.constants';
 import { ColasController } from './colas.controller';
 import { ColasService } from './colas.service';
@@ -19,9 +20,13 @@ export class ColaBrandsFactory{
     providers: [
         ColasService, 
         ColaBrandsFactory,
-        { provide: COLA_BRANDS, useFactory:(brandsFactory: ColaBrandsFactory) => 
-            brandsFactory.create(), 
-        inject: [ColaBrandsFactory]},
+        { 
+            provide: COLA_BRANDS, useFactory: async (connection: Connection): Promise<string[]> => {
+            const coffeeBrands = await Promise.resolve(['buddy brew', 'nescafe'])
+            return coffeeBrands;
+          },
+          inject: [Connection],
+        },
     ],
     exports: [ColasService]
 })

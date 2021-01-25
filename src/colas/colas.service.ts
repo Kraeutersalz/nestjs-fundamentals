@@ -19,7 +19,7 @@ export class ColasService {
     private readonly connection: Connection,
     @Inject(COLA_BRANDS) colaBrands: string[],
   ){
-    console.log(colaBrands);
+    console.log();
   }
 
   findAll(paginationQuery: PaginationQueryDto) {

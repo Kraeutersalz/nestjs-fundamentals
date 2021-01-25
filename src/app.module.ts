@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ColasModule } from './colas/colas.module';
 import { ColaRatingModule } from './cola-rating/cola-rating.module';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { ColaRatingModule } from './cola-rating/cola-rating.module';
       database: 'postgres', // name of our database,
       autoLoadEntities: true, // models will be loaded automatically (you don't have to explicitly specify the entities: [] array)
       synchronize: false, // your entities will be synced with the database (ORM will map entity definitions to corresponding SQL tabled), every time you run the application (recommended: disable in the production)
-    }), ColaRatingModule,
+    }), ColaRatingModule, DatabaseModule,
   ],
   controllers: [AppController,],
   providers: [AppService],
