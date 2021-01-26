@@ -1,4 +1,5 @@
 import { Injectable, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from 'src/events/entities/event.entity';
 import { Connection } from 'typeorm';
@@ -15,7 +16,7 @@ export class ColaBrandsFactory{
     }
 }
 @Module({
-    imports: [TypeOrmModule.forFeature([Cola, Flavor, Event])],
+    imports: [TypeOrmModule.forFeature([Cola, Flavor, Event]), ConfigModule],
     controllers: [ColasController],
     providers: [
         ColasService, 
