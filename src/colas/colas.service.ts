@@ -1,10 +1,11 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigType } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { Event } from 'src/events/entities/event.entity';
 import { Connection, Repository } from 'typeorm';
 import { COLA_BRANDS } from './colas.constants';
+import colasConfig from './config/colas.config';
 import { CreateColasDto } from './dto/create-colas.dto';
 import { UpdateColasDto } from './dto/update-colas.dto';
 import { Cola } from './entities/cola.entity';
@@ -18,13 +19,11 @@ export class ColasService {
     @InjectRepository(Flavor)
     private readonly flavorRepository: Repository<Flavor>,
     private readonly connection: Connection,
-    private readonly configService: ConfigService, 
+    @Inject(colasConfig.KEY)
+    private colasConfiguration: ConfigType<typeof colasConfig>, 
     @Inject(COLA_BRANDS) colaBrands: string[],
   ){
-    const databaseHost = this.configService.get<string>(
-      'DATABASE_HOST', 
-      'localhost');
-    console.log(databaseHost);
+    console.log(colasConfiguration);
   }
 
   findAll(paginationQuery: PaginationQueryDto) {

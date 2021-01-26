@@ -6,6 +6,7 @@ import { Connection } from 'typeorm';
 import { COLA_BRANDS } from './colas.constants';
 import { ColasController } from './colas.controller';
 import { ColasService } from './colas.service';
+import colasConfig from './config/colas.config';
 import { Cola } from './entities/cola.entity';
 import { Flavor } from './entities/flavor.entity';
 
@@ -16,7 +17,7 @@ export class ColaBrandsFactory{
     }
 }
 @Module({
-    imports: [TypeOrmModule.forFeature([Cola, Flavor, Event]), ConfigModule],
+    imports: [TypeOrmModule.forFeature([Cola, Flavor, Event]), ConfigModule.forFeature(colasConfig)],
     controllers: [ColasController],
     providers: [
         ColasService, 
